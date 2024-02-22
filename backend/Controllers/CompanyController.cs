@@ -40,12 +40,17 @@ namespace backend.Controllers
         [HttpGet]
         [Route("Get")]
 
-        public async Task<ActionResult<IEnumerable<CompanyGetDto>>> GetCompany()
+        public async Task<ActionResult<IEnumerable<CompanyGetDto>>> GetCompanies()
         {
             var companies = await _context.Companies.ToListAsync();
             var convertedCompanies = _mapper.Map<IEnumerable<CompanyGetDto>>(companies);
 
             return Ok(convertedCompanies);
         }
+
+        // Read (Get Company By ID)
+
+        // Update
+
     }
 }
