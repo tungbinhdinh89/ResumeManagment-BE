@@ -12,6 +12,6 @@ namespace backend.Core.Entities
 
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }
