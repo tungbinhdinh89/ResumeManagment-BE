@@ -84,6 +84,19 @@ namespace backend.Controllers
         }
 
         // Read (Get Job By ID)
+        [HttpGet]
+        [Route("job/{jobId}")]
+        public async Task<IActionResult> GetCandidatesByJobId(int jobId)
+        {
+            var candidates = await _context.Candidates
+                                           .Include(candidate => candidate.Job)
+                                           .Where(candidate => candidate.JobId == jobId)
+                                           .ToListAsync();
+
+            var convertedCandidates = _mapper.Map<IEnumerable<CandidateGetDto>>(candidates);
+
+            return Ok(convertedCandidates);
+        }
 
         // Update
 
