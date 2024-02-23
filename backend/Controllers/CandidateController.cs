@@ -46,14 +46,25 @@ namespace backend.Controllers
             }
 
             var newCandidate = _mapper.Map<Candidate>(dto);
-             await _context.AddAsync(newCandidate);
+            newCandidate.ResumeUrl = resumeUrl;
+            await _context.AddAsync(newCandidate);
             await _context.SaveChangesAsync();
 
             return Ok("Candidate create successfully");
         }
 
         // Read
-     
+        [HttpGet]
+        [Route("Get")]
+
+        public async Task<ActionResult<IEnumerable<CandidateGetDto>>> GetCandidates()
+        {
+            var candidates = await _context.Candidates.Include(candidate => candidate.Job).ToListAsync();
+            var convertedCandidates = _mapper.Map<IEnumerable<CandidateGetDto>>(candidates);
+
+            return Ok(convertedCandidates);
+        }
+
         // Read (Get Job By ID)
 
         // Update
