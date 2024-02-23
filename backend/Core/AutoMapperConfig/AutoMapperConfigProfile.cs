@@ -21,7 +21,8 @@ namespace backend.Core.AutoMapperConfig
 
             // Candidate
             CreateMap<CandidateCreateDto, Candidate>();
-          
+            CreateMap<Candidate, CandidateGetDto>()
+                .ForMember(dest => dest.JobTitle, opt => opt.MapFrom(src => src.Job.Title));
         }
     }
 }
