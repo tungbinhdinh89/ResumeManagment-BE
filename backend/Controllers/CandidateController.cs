@@ -25,13 +25,13 @@ namespace backend.Controllers
         [HttpPost]
         [Route("Create")]
 
-        public async Task<IActionResult> CreateCandidate([FromBody] CandidateCreateDto dto, IFormFile pdfFile)
+        public async Task<IActionResult> CreateCandidate([FromForm] CandidateCreateDto dto, IFormFile pdfFile)
         {
             // First => save pdf to server
             // Then => save url into our entity
 
             var fiveMegaByte = 5 * 1024 * 1024;
-            var pdfMineType = "application/json";
+            var pdfMineType = "application/pdf";
 
             if (pdfFile.Length > fiveMegaByte || pdfFile.ContentType != pdfMineType)
             {
@@ -39,7 +39,7 @@ namespace backend.Controllers
             }
 
             var resumeUrl = Guid.NewGuid().ToString() + ".pdf";
-            var filePatch = Path.Combine(Directory.GetCurrentDirectory(), "document", "pdfs", resumeUrl);
+            var filePatch = Path.Combine(Directory.GetCurrentDirectory(), "documents", "pdfs", resumeUrl);
             using (var stream = new FileStream(filePatch, FileMode.Create))
             {
                 await pdfFile.CopyToAsync(stream);
