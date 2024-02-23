@@ -71,9 +71,9 @@ namespace backend.Controllers
 
         public IActionResult DownloadPdfFile(string url)
         {
-            var filePatch = Path.Combine(Directory.GetCurrentDirectory(), "documents", "pdfs",  url);
+            var filePatch = Path.Combine(Directory.GetCurrentDirectory(), "documents", "pdfs", url);
 
-            if(!System.IO.File.Exists(filePatch))
+            if (!System.IO.File.Exists(filePatch))
             {
                 return NotFound("File Not Found");
             }
@@ -141,5 +141,21 @@ namespace backend.Controllers
         }
 
         // Delete
+        [HttpDelete]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> DeleteCandidate(long id)
+        {
+            var candidate = await _context.Candidates.FindAsync(id);
+
+            if (candidate == null)
+            {
+                return NotFound("Candidate not found");
+            }
+
+            _context.Candidates.Remove(candidate);
+            await _context.SaveChangesAsync();
+
+            return Ok("Candidate deleted successfully");
+        }
     }
 }
