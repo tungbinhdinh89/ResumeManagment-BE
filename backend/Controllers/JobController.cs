@@ -41,10 +41,32 @@ namespace backend.Controllers
 
         public async Task<ActionResult<IEnumerable<JobGetDto>>> GetJob()
         {
-            var jobs = await _context.Jobs.Include(job => job.Company).ToListAsync();
+            var jobs = await _context.Jobs.Include(job => job.Company).OrderByDescending(j => j.CreatedAt).ToListAsync();
             var convertedJob = _mapper.Map<IEnumerable<JobGetDto>>(jobs);
 
             return Ok(convertedJob);
         }
+
+        // Update
+
+        // Delete
+        [HttpDelete]
+        [Route("Delete/{id}")]
+
+        public async Task<ActionResult> DeleteJob(long id)
+        {
+            var job = await _context.Jobs.FindAsync(id);
+
+            if(job == null)
+            {
+                return NotFound("Job not found");
+            }
+
+            _context.Jobs.Remove(job);
+            _context.SaveChanges();
+
+            return Ok("Job delete successfully");
+        }
+
     }
 }
