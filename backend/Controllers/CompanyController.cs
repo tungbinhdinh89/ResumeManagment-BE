@@ -42,7 +42,7 @@ namespace backend.Controllers
 
         public async Task<ActionResult<IEnumerable<CompanyGetDto>>> GetCompanies()
         {
-            var companies = await _context.Companies.ToListAsync();
+            var companies = await _context.Companies.OrderByDescending(c => c.CreatedAt).ToListAsync();
             var convertedCompanies = _mapper.Map<IEnumerable<CompanyGetDto>>(companies);
 
             return Ok(convertedCompanies);
@@ -52,5 +52,22 @@ namespace backend.Controllers
 
         // Update
 
+        // Delete
+        [HttpDelete]
+        [Route("Delete/{id}")]
+
+        public async Task<IActionResult> DeleteCompany(long id)
+        {
+            var company = await _context.Companies.FindAsync(id);
+            if(company == null)
+            {
+                return NotFound("Company not found");
+            }
+
+            _context.Companies.Remove(company);
+            await _context.SaveChangesAsync();
+
+            return Ok("Company deleted successfully");
+        }
     }
 }
